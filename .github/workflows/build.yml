@@ -1,0 +1,31 @@
+name: Build unsigned test package
+on:
+  push:
+    branches: [main]
+    paths:
+      - build.py
+      - INSTALL.txt
+      - tests/**
+      - tools/text-door/**
+      - .github/workflows/build.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check text and editing logic
+        run: node tests/test-core.cjs
+      - name: Build unsigned source package
+        run: python3 build.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: textdoor-UNSIGNED-test-package
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,32 @@
+文字任意门 / textdoor 测试版
+
+基于共享原版修改：https://www.icloud.com/shortcuts/283533a45a004b9ebaa0b2cf85298673
+原界面与原作者信息保留。本仓库公开源码；原版材料的授权仍归原权利人。
+
+目前状态
+源码与逻辑测试已完成，尚未通过 iPhone 真机验收。
+GitHub macOS 官方签名实验已经实际失败：
+Error: In order to do this, you must be signed into iCloud.
+实验：https://github.com/Rone89/textdoor/actions/runs/40111580029
+因此 dist 中的 UNSIGNED 文件不能作为可直接导入 iPhone 的成品。
+
+Mac 上签名
+登录 iCloud 的 Mac 下载仓库后，在仓库目录运行：
+python3 build.py
+shortcuts sign --mode anyone --input dist/textdoor-v2-UNSIGNED.shortcut --output dist/textdoor-v2.shortcut
+成功后把 dist/textdoor-v2.shortcut 传到 iPhone 添加。
+
+真机验收
+保留原版，给测试版使用不同名称。
+1. 先复制一段文字，运行测试版，不选字退出：剪贴板应恢复。
+2. 只选文字，不选平台，关闭网页：粘贴结果应为纯文字。
+3. 测试双引号、反斜杠、HTML、数字、价格、时间、短英文和表情。
+4. 编辑后返回选字：修改内容应保留；“恢复原文”应有效。
+5. 选择文字和平台，再取消选择退出：不得执行旧操作。
+6. 分别验证一个搜索平台、一个备忘录/提醒事项操作。
+7. 测试长截图、拖选、键盘和空图片的手动输入入口。
+网页内部暂用剪贴板传值，必须关闭网页并等待后续动作结束，再粘贴最终文字。
+
+本地测试
+node tests/test-core.cjs
+Python build.py 的输出仅为未签名 plist，不构成 Apple 动作参数验证或签名验证。
